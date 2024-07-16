@@ -35,7 +35,7 @@ def main():
     cascade = cv2.CascadeClassifier('File/haarcascade_frontalface_default.xml')
 
     # Initialize a counter for the statistics
-    counter = {"Someone else": 0, "Michael": 0,"Mia": 0,}
+    counter = {"Someone else": 0, "{__name_of_first_person__}": 0,"{__name_of_second_peron__}": 0,}
 
     while True:
         _, frame = capture.read()
@@ -43,31 +43,31 @@ def main():
         faces = cascade.detectMultiScale(gray)
 
         # Lists to store the faces and their confidence levels
-        faces_and_confidences_michael = []
-        faces_and_confidences_mia = []
+        faces_and_confidences_name = []
+        faces_and_confidences_name2 = []
         faces_and_confidences_someone_else = []
 
         for (x, y, w, h) in faces:
             label, confidence = recognizer.predict(gray[y: y + h, x: x + w])
-            if label == 1:  # If the detected face is Michael
+            if label == 1:  
                 faces_and_confidences_michael.append(((x, y, w, h), confidence))
-            elif label == 2:  # If the detected face is Mia
+            elif label == 2: 
                 faces_and_confidences_mia.append(((x, y, w, h), confidence))
             else:
                 faces_and_confidences_someone_else.append(((x,y,w,h,), confidence))
 
         # If faces were detected, select the face with the highest confidence level
-        if faces_and_confidences_michael:
+        if faces_and_confidences_name:
             # Sort the list by confidence levels in descending order and select the first element
             (x, y, w, h), confidence = sorted(faces_and_confidences_michael, key=lambda x: x[1], reverse=True)[0]
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-            cv2.putText(frame, f"Michael {round(confidence, 1)}%", (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+            cv2.putText(frame, f"name {round(confidence, 1)}%", (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
         if faces_and_confidences_mia:
             # Sort the list by confidence levels in descending order and select the first element
             (x, y, w, h), confidence = sorted(faces_and_confidences_mia, key=lambda x: x[1], reverse=True)[0]
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-            cv2.putText(frame, f"Mia {round(confidence, 1)}%", (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (182, 14, 255), 2)
+            cv2.putText(frame, f"name2 {round(confidence, 1)}%", (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (182, 14, 255), 2)
 
         if faces_and_confidences_someone_else:
             # Sort the list
